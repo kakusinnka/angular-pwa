@@ -16,4 +16,7 @@ https://angular.cn/guide/service-worker-intro
 3. Service Worker简介： https://developers.google.com/web/fundamentals/primers/service-workers/
 ## 2. 快速上手
 1. 如果没有使用 HTTPS，那么 Service Worker 只会在 localhost 上的应用中进行注册。
-2. 由于 ng serve 对 Service Worker 无效，所以必须用一个独立的 HTTP 服务器在本地测试你的项目。 你可以使用任何 HTTP 服务器。下面这个例子使用来自 npm 中的 [http-server](https://www.npmjs.com/package/http-server) 包。
+2. 由于 ng serve 对 Service Worker 无效，所以必须用一个独立的 HTTP 服务器在本地测试你的项目。 你可以使用任何 HTTP 服务器。下面这个例子使用来自 npm 中的 [http-server](https://www.npmjs.com/package/http-server) 包。  
+3. Service Worker 请求了 /ngsw.json 文件，这是 Service Worker 正在检查更新。
+## 3. 应用外壳
+1. 应用外壳是一种在构建期间借助路由渲染部分应用的方法。它可以通过快速启动一个静态渲染页面（所有页面的公共骨架）来改善用户体验。与此同时，浏览器会下载完整的客户端版本，并在代码加载后自动切换到完整版。这能让用户快速看到应用中第一个有意义的画面，因为浏览器可以渲染出 HTML 和 CSS，而无需初始化任何 JavaScript。 https://developers.google.com/web/fundamentals/architecture/app-shell
