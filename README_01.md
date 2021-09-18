@@ -20,3 +20,11 @@ https://angular.cn/guide/service-worker-intro
 3. Service Worker 请求了 /ngsw.json 文件，这是 Service Worker 正在检查更新。
 ## 3. 应用外壳
 1. 应用外壳是一种在构建期间借助路由渲染部分应用的方法。它可以通过快速启动一个静态渲染页面（所有页面的公共骨架）来改善用户体验。与此同时，浏览器会下载完整的客户端版本，并在代码加载后自动切换到完整版。这能让用户快速看到应用中第一个有意义的画面，因为浏览器可以渲染出 HTML 和 CSS，而无需初始化任何 JavaScript。 https://developers.google.com/web/fundamentals/architecture/app-shell
+## 4. 与 Service Worker 通讯
+1. 把 ServiceWorkerModule 导入到你的 AppModule 中不仅会注册 Service Worker，还会提供一些服务，让你能和 Service Worker 通讯，并控制你的应用缓存。
+2. SwUpdate 服务
+    1. 获取出现可用更新的通知。如果要刷新页面，这些就是可加载的新版本。
+    2. 获取更新被激活的通知。这时候 Service Worker 就可以立即使用这些新版本提供服务了。
+    3. 要求 Service Worker 向服务器查询是否有新版本。
+    4. 要求 Service Worker 为当前标签页激活该应用的最新版本。 
+3. 可以要求 Service Worker 检查是否有任何更新已经发布到了服务器上。 Service Worker 会在初始化和每次导航请求（也就是用户导航到应用中的另一个地址）时检查更新。 
