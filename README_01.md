@@ -1,145 +1,30 @@
-# angular-pwa
-## 1. 运行命令 【ng add @angular/pwa】
-### 【angular.json】文件的变化
-> projects --> build  
-![image](https://user-images.githubusercontent.com/57317985/128032445-d8921e24-61e3-4dfe-b026-7c5a22360816.png)  
-> projects --> test  
-![image](https://user-images.githubusercontent.com/57317985/132937365-4fb7216e-6af1-4ee2-98f9-07d1ada581be.png)
-> 1.**manifest.webmanifest**：[Web应用程序清单](https://developer.mozilla.org/zh-CN/docs/Web/Manifest "Web应用程序清单")在一个JSON文本文件中提供有关应用程序的信息（如名称，作者，图标和描述）。manifest 的目的是将Web应用程序安装到设备的主屏幕，为用户提供更快的访问和更丰富的体验。  
-> 2.**"serviceWorker": true,**:此标志将导致生产版本在输出 dist 文件夹中包含几个额外的文件。Angular Service Worker 主体文件 **ngsw-worker.js**, Angular Service Worker 配置文件 **ngsw.json**。  
-> 3.**"ngswConfigPath": "ngsw-config.json"**:指定**ngsw-config.json**文件相对于工作区目录的路径。
-### 新增 【ngsw-config.json】文件
-> 1.Service Worker 配置文件，用于配置 Angular Service Worker 运行时行为，并且生成的文件带有一些智能默认值（它会用来指定缓存的行为以及其它设定）。  
-> 2.所有文件路径都必须以 / 开头，也就是相应的部署目录。
-```
-{
-  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
-  "index": "/index.html",
-  "assetGroups": [
-    {
-      "name": "app",
-      "installMode": "prefetch",
-      "resources": {
-        "files": [
-          "/favicon.ico",
-          "/index.html",
-          "/manifest.webmanifest",
-          "/*.css",
-          "/*.js"
-        ]
-      }
-    },
-    {
-      "name": "assets",
-      "installMode": "lazy",
-      "updateMode": "prefetch",
-      "resources": {
-        "files": [
-          "/assets/**",
-          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
-        ]
-      }
-    }
-  ]
-}
-
-```
-### 【package.json】文件的变化
-> 把 @angular/service-worker 添加到你的项目中。
-![image](https://user-images.githubusercontent.com/57317985/128033727-86527d5d-18a5-4729-9bf4-fad6a04446da.png)
-### 【index.html】文件的变化
-> 1.添加 manifest.webmanifest 文件链接标记。  
-> 2.为 theme-color 添加 meta 标签,设置状态栏等的颜色。  
-![image](https://user-images.githubusercontent.com/57317985/132948077-985b950f-f556-4d29-8ea6-d9af4810bae3.png)
-### 新增 [manifest.webmanifest](https://developer.mozilla.org/zh-CN/docs/Web/Manifest "Web应用程序清单") 文件
-> 
-```
-{
-  "name": "pwa",
-  "short_name": "pwa",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
-  "display": "standalone",
-  "scope": "./",
-  "start_url": "./",
-  "icons": [
-    {
-      "src": "assets/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "assets/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "assets/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "assets/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "assets/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "assets/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "assets/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "assets/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable any"
-    }
-  ]
-}
-```
-### 【app.module.ts】文件的变化
-> 1.在跟模块中导入并注册 Angular Service Worker到生产环境中。
-> 2.[ServiceWorkerModule.register();](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register "")  
-![image](https://user-images.githubusercontent.com/57317985/128036084-57a36afe-854f-47ef-9679-e2022cc7e613.png)
-### 创建图标文件
-> ![image](https://user-images.githubusercontent.com/57317985/128036182-b0f60539-e6d0-4808-ac34-bdf46c9d2412.png)
-<br><br>
-## 生产构建文件夹
-> ![image](https://user-images.githubusercontent.com/57317985/132971128-7a344fb2-38a9-4317-b96e-a915626f1af3.png)
-### ngsw-worker.js
-> 这个文件就是 Angular Service Worker 本身。 与所有 Service Worker 一样，它通过自己单独的 HTTP 请求进行交付，以便浏览器可以跟踪它是否发生了变化，并将其应用于 Service Worker 生命周期。
-### ngsw.json
-> 这是 Angular Service Worker 将使用的运行时配置文件。 该文件基于 ngsw-config.json 文件构建，包含 Angular Service Worker 在运行时了解需要缓存哪些文件以及何时缓存所需的所有信息。  
-## 总结
-### 知识点1
-> 服务器和前台部署根目录的关系。  
-> 服务器：```https://www.hzh.com:8080```  
-> 前台部署跟目录：```/front/v1/index.html```  
-> 服务启动在服务器跟目录的话，需要加```<base href="/front/v1/"/>```链接到前台部署跟目录。服务器启动在前台部署跟目录下面的话，就不需要```base href```了。
-### 知识点2
-> 命令配置```ngsw.json```中的文件路径。
-> 例子：```ngsw-config": "./node_modules/.bin/ngsw-config ./dist/front/v1 ./ngsw-config.json /front/v1```  
-> 执行：```npm run ngsw-config```  
-> 语法：```./node_modules/.bin/ngsw-config ./dist/<project-name> ./ngsw-config.json [/base/href]```
-### 知识点3
-> ```<base href="/front/v1/"/>```相对于```<link rel="icon" type="image/x-icon" href="favicon.ico">```和```<link rel="manifest" href="manifest.webmanifest">```中的href也管用。
-### 知识点4
-> PWA的build命令
-> ```ng build --prod --output-path=./dist/front/v3/ --base-href=/front/v3/``` ```--base-herf```同时会配置```ngsw.json```中的路径，同时也会影响```manifest```文件的“scope”和“start_url”
+# angular-pwa 官方解说  
+https://angular.cn/guide/service-worker-intro
+## 1. 简介
+### 概念
+1. 为 Angular 应用添加 [Service Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API) 是把应用转换成[渐进式应用（PWA）](https://web.dev/progressive-web-apps/ "PWA")的步骤之一。  
+2. 简单来说，Service Worker 就是一段运行在 Web 浏览器中，并为应用管理缓存的脚本。  
+3. Service Worker 的功能就像一个网络代理。它们会拦截所有由应用发出的 HTTP 请求，并选择如何给出响应。 比如，它们可以查询局部缓存，如果有缓存的响应数据，就用它做出响应。基于 Service Worker 的缓存是完全可编程的，并且不依赖于服务端指定的那些控制缓存策略的头。  
+4. Service Worker 在用户关闭浏览器页标签时仍然会被保留。 下次浏览器加载本应用时，Service Worker 会首先加载，然后拦截加载本应用时的对每一项资源的请求。
+### 特性
+1. 像安装原生应用一样缓存应用。该应用作为整体被缓存，它的所有文件作为整体进行更新。正在运行的应用使用所有文件的同一版本继续运行。  
+2. 当用户刷新本应用时，他们会看到最新的被完全缓存的版本。
+### 前提条件
+1. 为了注册 Service Worker，必须通过 HTTPS 而非 HTTP 访问该应用程序。浏览器会忽略通过不安全连接访问的页面上的 Service Worker。
+### 其他
+1. 浏览器支持信息： https://caniuse.com/serviceworkers &nbsp;&nbsp; https://jakearchibald.github.io/isserviceworkerready/
+3. Service Worker简介： https://developers.google.com/web/fundamentals/primers/service-workers/
+## 2. 快速上手
+1. 如果没有使用 HTTPS，那么 Service Worker 只会在 localhost 上的应用中进行注册。
+2. 由于 ng serve 对 Service Worker 无效，所以必须用一个独立的 HTTP 服务器在本地测试你的项目。 你可以使用任何 HTTP 服务器。下面这个例子使用来自 npm 中的 [http-server](https://www.npmjs.com/package/http-server) 包。  
+3. Service Worker 请求了 /ngsw.json 文件，这是 Service Worker 正在检查更新。
+## 3. 应用外壳
+1. 应用外壳是一种在构建期间借助路由渲染部分应用的方法。它可以通过快速启动一个静态渲染页面（所有页面的公共骨架）来改善用户体验。与此同时，浏览器会下载完整的客户端版本，并在代码加载后自动切换到完整版。这能让用户快速看到应用中第一个有意义的画面，因为浏览器可以渲染出 HTML 和 CSS，而无需初始化任何 JavaScript。 https://developers.google.com/web/fundamentals/architecture/app-shell
+## 4. 与 Service Worker 通讯
+1. 把 ServiceWorkerModule 导入到你的 AppModule 中不仅会注册 Service Worker，还会提供一些服务，让你能和 Service Worker 通讯，并控制你的应用缓存。
+2. SwUpdate 服务
+    1. 获取出现可用更新的通知。如果要刷新页面，这些就是可加载的新版本。
+    2. 获取更新被激活的通知。这时候 Service Worker 就可以立即使用这些新版本提供服务了。
+    3. 要求 Service Worker 向服务器查询是否有新版本。
+    4. 要求 Service Worker 为当前标签页激活该应用的最新版本。 
+3. 可以要求 Service Worker 检查是否有任何更新已经发布到了服务器上。 Service Worker 会在初始化和每次导航请求（也就是用户导航到应用中的另一个地址）时检查更新。 
