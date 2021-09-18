@@ -15,3 +15,5 @@ https://angular.cn/guide/service-worker-intro
 1. 浏览器支持信息： https://caniuse.com/serviceworkers &nbsp;&nbsp; https://jakearchibald.github.io/isserviceworkerready/
 3. Service Worker简介： https://developers.google.com/web/fundamentals/primers/service-workers/
 ## 2. 快速上手
+1. 如果没有使用 HTTPS，那么 Service Worker 只会在 localhost 上的应用中进行注册。
+2. 由于 ng serve 对 Service Worker 无效，所以必须用一个独立的 HTTP 服务器在本地测试你的项目。 你可以使用任何 HTTP 服务器。下面这个例子使用来自 npm 中的 [http-server](https://www.npmjs.com/package/http-server) 包。
