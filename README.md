@@ -10,7 +10,8 @@
 > 3.**"ngswConfigPath": "ngsw-config.json"**:指定**ngsw-config.json**文件相对于工作区目录的路径。
 ### 新增 【ngsw-config.json】文件
 > 1.Service Worker 配置文件，用于配置 Angular Service Worker 运行时行为，并且生成的文件带有一些智能默认值（它会用来指定缓存的行为以及其它设定）。  
-> 2.所有文件路径都必须以 / 开头，也就是相应的部署目录。
+> 2.所有文件路径都必须以 / 开头，也就是相应的部署目录。  
+> 3.如果在生成了配置文件之后修改了 resourcesOutputPath 或 assets 的路径，那么就要在 ngsw-config.json 中手动修改这些路径。
 ```
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
