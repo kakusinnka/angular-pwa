@@ -28,3 +28,14 @@ https://angular.cn/guide/service-worker-intro
     3. 要求 Service Worker 向服务器查询是否有新版本。
     4. 要求 Service Worker 为当前标签页激活该应用的最新版本。 
 3. 可以要求 Service Worker 检查是否有任何更新已经发布到了服务器上。 Service Worker 会在初始化和每次导航请求（也就是用户导航到应用中的另一个地址）时检查更新。 
+## 5. 生产环境下的 Service Worker
+1. 从概念上说，你可以把 Angular Service Worker 想象成一个转发式缓存或装在最终用户浏览器中的 CDN 边缘。 Service Worker 的工作是从本地缓存中满足 Angular 应用对资源或数据的请求，而不用等待网络。
+2. 在任何一个给定的时间，Service Worker 可能会在它的缓存中拥有此应用的多个版本，这几个版本也都能用于提供服务。
+3. 每当用户打开或刷新应用程序时，Angular Service Worker 都会通过查看清单（manifest）文件 “ngsw.json” 的更新来检查该应用程序的更新。 如果它找到了更新，就会自动下载并缓存这个版本，并在下次加载应用程序时提供。
+4. Angular Service Worker 会在虚拟目录 ```ngsw/``` 下暴露出调试信息。 目前，它暴露的唯一的 URL 是 ```ngsw/state```。
+5. 要停用 Service Worker，请删除或重命名 ngsw.json 文件。 当 Service Worker 对 ngsw.json 的请求返回 404 时，Service Worker 就会删除它的所有缓存并注销自己，本质上就是自毁。
+6. 要停用 Service Worker，您只需要在产品中重命名ngsw-worker.js，且重命名safety-worker.js为ngsw-worker.js。并将其保留一段时间。
+7. 重要的是，要记住 Service Worker 无法在重定向后工作。为了解决这个问题，你可能需要用上述技巧5或6杀死老的 Worker。
+## Service Worker 配置
+1. 配置文件 ngsw-config.json 指定了 Angular Service Worker 应该缓存哪些文件和数据的 URL，以及如何更新缓存的文件和数据。 Angular CLI 会在 ng build 期间处理配置文件。 如果想手动处理，你可以使用 ngsw-config 工具。
+2. 当 ServiceWorker 处理请求时，它将按照资源组在 ngsw-config.json 中出现的顺序对其进行检查。与所请求的资源匹配的第一个资源组将处理该请求。
